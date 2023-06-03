@@ -1,17 +1,17 @@
 import "@/styles/globals.css"
 import "@rainbow-me/rainbowkit/styles.css"
+
 import { Metadata } from "next"
 
 import { siteConfig } from "@/config/site"
 import { fontSans } from "@/lib/fonts"
 import { cn } from "@/lib/utils"
+import { SideBar } from "@/components/side-bar"
 import { SiteHeader } from "@/components/site-header"
 import { TailwindIndicator } from "@/components/tailwind-indicator"
 import { ThemeProvider } from "@/components/theme-provider"
 
 import { Providers } from "./providers"
-
-import { SideBar} from "@/components/side-bar"
 
 export const metadata: Metadata = {
   title: {
@@ -51,9 +51,9 @@ export default function RootLayout({ children }: RootLayoutProps) {
                 <SiteHeader />
                 <div className="flex flex-row grow">
                   <div className="text-xl min-w-fit border-r-2">
-                    <SideBar/>
+                    <SideBar />
                   </div>
-                  <div className="overflow-y-scroll">
+                  <div className="overflow-y-auto grow flex items-center justify-center">
                     {children}
                   </div>
                 </div>
