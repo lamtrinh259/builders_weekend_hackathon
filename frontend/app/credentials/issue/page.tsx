@@ -1,10 +1,11 @@
 import Link from "next/link"
 
+import IssueCredentialForm from "./form"
+
 export default function IssuePage() {
   return (
-    <div>
-      Issue Page
-      <Link href="/credentials/create">to the create page</Link>
-    </div>
+    <section>
+      <IssueCredentialForm />
+    </section>
   )
 }
