@@ -11,6 +11,8 @@ import { ThemeProvider } from "@/components/theme-provider"
 
 import { Providers } from "./providers"
 
+import { SideBar} from "@/components/side-bar"
+
 export const metadata: Metadata = {
   title: {
     default: siteConfig.name,
@@ -47,7 +49,14 @@ export default function RootLayout({ children }: RootLayoutProps) {
             <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
               <div className="relative flex min-h-screen flex-col">
                 <SiteHeader />
-                <div className="flex-1">{children}</div>
+                <div className="flex flex-row grow">
+                  <div className="text-xl min-w-fit border-r-2">
+                    <SideBar/>
+                  </div>
+                  <div className="overflow-y-scroll">
+                    {children}
+                  </div>
+                </div>
               </div>
               <TailwindIndicator />
             </ThemeProvider>

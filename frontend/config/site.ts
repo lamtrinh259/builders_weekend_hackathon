@@ -1,3 +1,5 @@
+import {Pencil, FilePlus, Forward, BadgeCheck} from "lucide-react"
+
 export type SiteConfig = typeof siteConfig
 
 export const siteConfig = {
@@ -9,4 +11,26 @@ export const siteConfig = {
       href: "/",
     },
   ],
+  sideNav: [
+    {
+      label: "create credential format",
+      href: "/create",
+      icon: FilePlus,
+    },
+    {
+      label: "issue credential",
+      href: "/issue",
+      icon: Pencil,
+    },
+    {
+      label: "proof request",
+      href: "/proof",
+      icon: Forward,
+    },
+    {
+      label: "verify credential",
+      href: "/verify",
+      icon: BadgeCheck,
+    },
+  ]
 }
