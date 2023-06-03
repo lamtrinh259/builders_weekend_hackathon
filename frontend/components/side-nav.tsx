@@ -1,6 +1,5 @@
 import { SideItem } from "@/types/nav"
 import Link from "next/link"
-import {Pencil, FilePlus, Forward, BadgeCheck} from "lucide-react"
 
 interface SideItems {
   items: SideItem[]
