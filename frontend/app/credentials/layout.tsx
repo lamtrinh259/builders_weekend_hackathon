@@ -4,9 +4,9 @@ interface RootLayoutProps {
 
 export default function CredentialLayout({ children }: RootLayoutProps) {
   return (
-    <div>
-      Credential Layout
-      <div>{children}</div>
+    <div className="flex">
+      <div className="w-48 shrink-0">Credential Layout</div>
+      <div className="flex h-full items-center bg-grey-800">{children}</div>
     </div>
   )
 }
