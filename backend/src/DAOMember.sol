@@ -28,7 +28,6 @@ contract DAOMember is ReentrancyGuard {
     uint age;
     bool hasNFT;
     address member;
-    uint version;
   }
 
   DAOMember[] public members;
@@ -43,7 +42,7 @@ contract DAOMember is ReentrancyGuard {
     onlyOwner(); // Only owner should be able to add member
     require(memberIds[_member] == 0, "Member already exists");
     uint256 memberId = members.length;
-    members.push(DAOMember(_name, _age, _hasNFT, _member, 1));
+    members.push(DAOMember(_name, _age, _hasNFT, _member));
     memberIds[_member] = memberId;
     emit MemberAdded(_member, memberId);
   }
@@ -57,14 +56,13 @@ contract DAOMember is ReentrancyGuard {
     emit MemberDeleted(_member, memberId);
   }
 
-  function getDAOMember(address _member) public view returns (string memory, uint, bool, address, uint) {
+  function getDAOMember(address _member) public view returns (string memory, uint, bool, address) {
     uint256 memberId = memberIds[_member];
     return (
       members[memberId].name,
       members[memberId].age,
       members[memberId].hasNFT,
-      members[memberId].member,
-      members[memberId].version
+      members[memberId].member
     );
   }
 

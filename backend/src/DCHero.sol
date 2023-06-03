@@ -11,8 +11,8 @@ contract DCHero {
 
     function convertDAOMemberDataToJsonhash(address memberAddress) public view returns (bytes32) {
         DAOMember daomember = DAOMember(memberAddress);
-        (string memory name, uint age, bool hasNFT, address member, uint version) = daomember.getDAOMember(memberAddress);
-        bytes memory memberData = abi.encode(name, age, hasNFT, member, version);
+        (string memory name, uint age, bool hasNFT, address member) = daomember.getDAOMember(memberAddress);
+        bytes memory memberData = abi.encode(name, age, hasNFT, member);
         bytes32 jsonHash = bytes32(memberData);
         return jsonHash;
     }
