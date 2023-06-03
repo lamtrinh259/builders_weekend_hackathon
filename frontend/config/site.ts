@@ -13,22 +13,22 @@ export const siteConfig = {
   ],
   sideNav: [
     {
-      label: "create credential format",
+      label: "Create a credential format",
       href: "/credentials/create",
       icon: FilePlus,
     },
     {
-      label: "issue credential",
+      label: "Issue a credential",
       href: "/credentials/issue",
       icon: Pencil,
     },
     {
-      label: "proof request",
+      label: "Proof request",
       href: "/credentials/proof",
       icon: Forward,
     },
     {
-      label: "verify credential",
+      label: "Verify credential",
       href: "/credentials/verify",
       icon: BadgeCheck,
     },

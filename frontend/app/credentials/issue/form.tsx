@@ -220,7 +220,7 @@ export default function IssueCredentialForm() {
         </form>
       </Form>
 
-      <div className="border container rounded bg-grey-100 p-4">
+      <div className="border w-72 rounded bg-grey-100 p-4">
         <h1 className="text-2xl font-bold">Credentials</h1>
         <div className="flex flex-col gap-2">
           {isReading ? (

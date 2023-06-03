@@ -9,6 +9,7 @@ import {
   RainbowKitProvider,
 } from "@rainbow-me/rainbowkit"
 import { metaMaskWallet } from "@rainbow-me/rainbowkit/wallets"
+import { useTheme } from "next-themes"
 import { configureChains, createConfig, WagmiConfig, type Chain } from "wagmi"
 import { goerli, localhost, sepolia } from "wagmi/chains"
 import { publicProvider } from "wagmi/providers/public"
@@ -88,15 +89,13 @@ const wagmiConfig = createConfig({
 export function Providers({ children }: { children: React.ReactNode }) {
   const [mounted, setMounted] = React.useState(false)
   React.useEffect(() => setMounted(true), [])
+  const { resolvedTheme } = useTheme()
   return (
     <WagmiConfig config={wagmiConfig}>
       <RainbowKitProvider
         chains={chains}
         appInfo={demoAppInfo}
-        theme={{
-          lightMode: lightTheme(),
-          darkMode: darkTheme(),
-        }}
+        theme={resolvedTheme === "dark" ? darkTheme() : lightTheme()}
       >
         {mounted && children}
       </RainbowKitProvider>
