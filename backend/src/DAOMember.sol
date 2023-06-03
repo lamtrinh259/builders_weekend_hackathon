@@ -76,6 +76,4 @@ contract DAOMember is ReentrancyGuard {
     return members.length;
   }
 
-
-
 }
