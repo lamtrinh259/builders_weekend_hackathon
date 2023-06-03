@@ -54,7 +54,7 @@ const astarlocal = {
 } as const satisfies Chain
 
 const { chains, publicClient, webSocketPublicClient } = configureChains(
-  [goerli, sepolia, localhost, shibuya, astarlocal],
+  process.env.NODE_ENV === "development" ? [shibuya, astarlocal] : [shibuya],
   [publicProvider()]
 )
 
