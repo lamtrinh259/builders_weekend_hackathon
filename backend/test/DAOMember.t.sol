@@ -17,7 +17,7 @@ contract DAOMemberTest is DSTest {
     User user;
 
     function setUp() public {
-      main = new DAOMember("Test DAO name");
+      main = new DAOMember("Cool builders DAO");
       user = new User();
     }
 

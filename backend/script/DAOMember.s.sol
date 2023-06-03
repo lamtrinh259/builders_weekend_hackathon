@@ -9,6 +9,6 @@ contract DAOMemberScript is Script {
 
     function run() public {
         vm.broadcast();
-        new DAOMember("Test DAO name");
+        new DAOMember("Cool builders DAO");
     }
 }
