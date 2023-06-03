@@ -1,4 +1,4 @@
-import {Pencil, FilePlus, Forward, BadgeCheck} from "lucide-react"
+import { BadgeCheck, FilePlus, Forward, Pencil } from "lucide-react"
 
 export type SiteConfig = typeof siteConfig
 
@@ -14,23 +14,23 @@ export const siteConfig = {
   sideNav: [
     {
       label: "create credential format",
-      href: "/create",
+      href: "/credentials/create",
       icon: FilePlus,
     },
     {
       label: "issue credential",
-      href: "/issue",
+      href: "/credentials/issue",
       icon: Pencil,
     },
     {
       label: "proof request",
-      href: "/proof",
+      href: "/credentials/proof",
       icon: Forward,
     },
     {
       label: "verify credential",
-      href: "/verify",
+      href: "/credentials/verify",
       icon: BadgeCheck,
     },
-  ]
+  ],
 }
