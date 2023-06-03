@@ -17,13 +17,8 @@ contract DCHero {
         return jsonHash;
     }
 
-    function getLookupHash(
-        address issuer, string calldata key
-    ) public pure returns (bytes32) {
-        return
-            keccak256(abi.encodePacked(issuer, key
-                )
-            );
+    function getLookupHash(address issuer, string calldata key) public pure returns (bytes32) {
+        return keccak256(abi.encodePacked(issuer, key));
     }
 
     function createCredential(string calldata key, bytes32 jsonHash) public returns (bytes32) {
@@ -32,14 +27,10 @@ contract DCHero {
             credentials[lookupHash] = jsonHash;
             emit CredentialCreated(msg.sender, key, lookupHash, jsonHash);
         }
-
         return lookupHash;
     }
 
-
-    function lookupJsonHash(
-        address issuer, string calldata key
-    ) public view returns (bytes32) {
+    function lookupJsonHash(address issuer, string calldata key) public view returns (bytes32) {
         return credentials[getLookupHash(issuer, key)];
     }
 
