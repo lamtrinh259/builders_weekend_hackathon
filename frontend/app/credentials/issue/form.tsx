@@ -2,8 +2,9 @@
 
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
-import * as z from "zod"
+import { z } from "zod"
 
+import { formSchema } from "@/types/formSchema"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import {
@@ -19,19 +20,13 @@ import { Input } from "@/components/ui/input"
 
 import { submitAction } from "./actions"
 
-const formSchema = z.object({
-  name: z.string().nonempty(),
-  age: z.number().int().positive(),
-  hasDAONFT: z.boolean(),
-})
-
 export default function IssueCredentialForm() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
   })
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values)
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    await submitAction(values)
   }
 
   return (
