@@ -2,13 +2,17 @@
 pragma solidity ^0.8.13;
 
 import { DAOMember } from "./DAOMember.sol"; // This compiled fine, no error
+// import "openzeppelin-contracts/contracts/utils/cryptography/ECDSA.sol";
+// import "openzeppelin-contracts/contracts/utils/cryptography/EIP712.sol";
+// import "openzeppelin-contracts/contracts/metatx/MinimalForwarder.sol";
 
 contract DCHero {
     // keccak256(encodePacked(issuer, key)) => sha256(entityJson)
-    mapping(bytes32 => bytes32) public credentials;
+    mapping(address => bytes32) public credentialFormats;
+    mapping(address => bytes32) public credentials;
 
     // event OldCredentialCreated(address issuer, string key, bytes32 lookupHash, bytes32 jsonHash);
-
+    event CredentialFormatCreated(address issuer, bytes32 credentialFormatHash);
     event CredentialCreated(address issuer, bytes32 credentialHash);
     event MemberAdded(string name, uint age, bool hasNFT, address wallet);
 
@@ -19,6 +23,12 @@ contract DCHero {
       uint int_field;
       bool bool_field;
       address address_field;
+    }
+
+    struct proofRequestFormat {
+      string name;
+      bool over18;
+      bool hasNFT;
     }
 
     // /**
@@ -50,7 +60,7 @@ contract DCHero {
     // @return credentialFormat the keccak256 hash of the credential
     // @dev not sure if bytes32 is the best type for the credentialFormat
     //  */
-    function createCredentialFormat(string memory _name, uint _age, bool _hasNFT, address _wallet) public pure returns (bytes32) {
+    function createCredentialFormat(string memory _name, uint _age, bool _hasNFT, address _wallet) public returns (bytes32) {
         Credential memory credential;
         credential.string_field = _name;
         credential.int_field = _age;
@@ -59,6 +69,8 @@ contract DCHero {
 
         bytes memory credentialData = abi.encodePacked(credential.string_field, credential.int_field, credential.bool_field, credential.address_field);
         bytes32 credentialFormat = keccak256(credentialData);
+        credentialFormats[msg.sender] = credentialFormat; // Store the newly created credentialFormat
+        emit CredentialFormatCreated(msg.sender, credentialFormat);
 
         return credentialFormat;
     }
@@ -96,9 +108,14 @@ contract DCHero {
 
     /// Function to generate proof request
     /// @dev not sure if bytes32 is the best type for the proof request
-    function createProofRequest(string memory name, bool over18, bool hasNFT) public pure returns (bytes32) {
-        bytes32 proofRequest = keccak256(abi.encodePacked(name, over18, hasNFT));
-        return proofRequest;
+    function createProofRequest(string memory name, bool over18, bool hasNFT) public pure returns (proofRequestFormat memory proofRequest, bytes32) {
+        bytes32 proofRequestHash = keccak256(abi.encodePacked(name, over18, hasNFT));
+        // return proofRequestHash;
+        // proofRequestFormat memory proofRequest;
+        proofRequest.name = name;
+        proofRequest.over18 = over18;
+        proofRequest.hasNFT = hasNFT;
+        return (proofRequest, proofRequestHash);
     }
 
     /// Function to unpack proof request
@@ -132,6 +149,15 @@ contract DCHero {
         // Unpack the proof request
         (string memory name, bool over18, bool hasNFT) = unpackProofRequest(proofRequest);
 
+        // address signer = _hashTypedDataV4(keccak256(abi.encode(
+        //     keccak256("proofRequestFormat(string name,bool over18,bool hasNFT)"),
+        //     proofRequest.name,
+        //     proofRequest.over18,
+        //     proofRequest.hasNFT
+        // ))).recover(signature);
+
+        // (string memory memberName, uint memberAge, bool memberHasNFT, ) = members.getDAOMember(signer);
+
         // Get the member's credential from the DAOMember contract, address is unused, so was left out of the function return
         (string memory memberName, uint memberAge, bool memberHasNFT, ) = members.getDAOMember(msg.sender);
 
@@ -150,9 +176,9 @@ contract DCHero {
         revert("Not implemented yet");
     }
 
-    function lookupJsonHash(address issuer, string calldata key) public view returns (bytes32) {
-        return credentials[getLookupHash(issuer, key)];
-    }
+    // function lookupJsonHash(address issuer, string calldata key) public view returns (bytes32) {
+    //     return credentials[getLookupHash(issuer, key)];
+    // }
 
 
 }
