@@ -20,6 +20,7 @@ import {
 const fieldTypes = ["string", "number", "boolean", "address"] as const
 const createCredFormSchema = z.array(
   z.object({
+    fieldKey: z.string().nonempty(),
     fieldName: z.string().nonempty(),
     fieldType: z.enum(fieldTypes),
   })
@@ -28,24 +29,30 @@ const createCredFormSchema = z.array(
 export default function CreateCredentialFormatForm() {
   const { isConnected, address } = useAccount()
 
-  const formValues: z.infer<typeof createCredFormSchema> = [
+  const [formValues, setFormValues] = useState<
+    z.infer<typeof createCredFormSchema>
+  >([
     {
+      fieldKey: "wallet_address",
       fieldName: "Wallet Address",
       fieldType: "address",
     },
     {
+      fieldKey: "name",
       fieldName: "Name",
       fieldType: "string",
     },
     {
+      fieldKey: "age",
       fieldName: "Age",
       fieldType: "number",
     },
     {
+      fieldKey: "has_dao_nft",
       fieldName: "Has DAO NFT",
       fieldType: "boolean",
     },
-  ]
+  ])
 
   async function onSubmit() {
     if (!isConnected) {
@@ -68,6 +75,10 @@ export default function CreateCredentialFormatForm() {
             <Input
               value={field.fieldName}
               onChange={(e) => {
+                const snake_case_value = e.target.value
+                  .replace(/\s+/g, "_")
+                  .toLowerCase()
+                formValues[key].fieldKey = snake_case_value
                 formValues[key].fieldName = e.target.value
               }}
               placeholder="Field Name"

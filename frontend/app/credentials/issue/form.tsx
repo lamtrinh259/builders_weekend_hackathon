@@ -28,6 +28,8 @@ const issueCredSchema = z.object({
 })
 
 export default function IssueCredentialForm() {
+  const [useMyAddress, setUseMyAddress] = useState(true)
+
   const { isConnected, address } = useAccount()
   const {
     data: credentials,
@@ -238,22 +240,22 @@ export default function IssueCredentialForm() {
         </form>
       </Form>
 
-      <div className="border w-72 rounded bg-grey-100 p-4">
-        <h1 className="text-2xl font-bold">Credentials</h1>
-        <div className="flex flex-col gap-2">
-          {isReading ? (
-            <p>Loading...</p>
-          ) : credentials ? (
-            <>
-              <p>Name: {credentials[0]}</p>
-              <p>Age: {credentials[1].toString()}</p>
-              <p>Has DAO NFT: {credentials[2] ? "Yes" : "No"}</p>
-            </>
-          ) : (
-            <p>No credentials found</p>
+      <div className="flex flex-col gap-2 font-mono-border-rounded-md">
+        <h2 className="text-lg font-bold">Credentials</h2>
+        <pre className="p-2 bg-gray-900 text-white">
+          {JSON.stringify(
+            {
+              name: credentials?.[0] ?? "",
+              age: credentials?.[1].toString() ?? 0,
+              hasDAONFT: credentials?.[2] ?? false,
+            },
+            null,
+            2
           )}
-        </div>
-        <Button onClick={() => refetch()}>Refresh</Button>
+        </pre>
+        <Button className="shrink-0" onClick={() => refetch()}>
+          Refresh
+        </Button>
       </div>
     </div>
   )
