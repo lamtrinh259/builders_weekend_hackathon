@@ -31,117 +31,49 @@ export default function IssueCredentialForm() {
   const [useMyAddress, setUseMyAddress] = useState(true)
 
   const { isConnected, address } = useAccount()
-  const {
-    data: credentials,
-    isLoading: isReading,
-    refetch,
-  } = useContractRead({
-    account: address,
-    enabled: isConnected,
-    address: contractAddresses.issueCredentials,
-    abi: [
-      {
-        inputs: [
-          {
-            internalType: "string",
-            name: "name",
-            type: "string",
-          },
-          {
-            internalType: "int256",
-            name: "age",
-            type: "int256",
-          },
-          {
-            internalType: "bool",
-            name: "hasDAONFT",
-            type: "bool",
-          },
-        ],
-        name: "setCredentials",
-        outputs: [],
-        stateMutability: "nonpayable",
-        type: "function",
-      },
-      {
-        inputs: [],
-        name: "getCredentials",
-        outputs: [
-          {
-            internalType: "string",
-            name: "name",
-            type: "string",
-          },
-          {
-            internalType: "int256",
-            name: "age",
-            type: "int256",
-          },
-          {
-            internalType: "bool",
-            name: "hasDAONFT",
-            type: "bool",
-          },
-        ],
-        stateMutability: "view",
-        type: "function",
-      },
-    ],
-    functionName: "getCredentials",
-  })
+  const [cred, setCred] = useState<z.infer<typeof issueCredSchema> | null>(null)
 
-  const { writeAsync, isLoading: isWriting } = useContractWrite({
-    address: contractAddresses.issueCredentials,
-    abi: [
-      {
-        inputs: [
-          {
-            internalType: "string",
-            name: "name",
-            type: "string",
-          },
-          {
-            internalType: "int256",
-            name: "age",
-            type: "int256",
-          },
-          {
-            internalType: "bool",
-            name: "hasDAONFT",
-            type: "bool",
-          },
-        ],
-        name: "setCredentials",
-        outputs: [],
-        stateMutability: "nonpayable",
-        type: "function",
-      },
-      {
-        inputs: [],
-        name: "getCredentials",
-        outputs: [
-          {
-            internalType: "string",
-            name: "name",
-            type: "string",
-          },
-          {
-            internalType: "int256",
-            name: "age",
-            type: "int256",
-          },
-          {
-            internalType: "bool",
-            name: "hasDAONFT",
-            type: "bool",
-          },
-        ],
-        stateMutability: "view",
-        type: "function",
-      },
-    ],
-    functionName: "setCredentials",
-  })
+  const { writeAsync: createCredential, isLoading: isWriting } =
+    useContractWrite({
+      address: contractAddresses.issueCredentials,
+      abi: [
+        {
+          inputs: [
+            {
+              internalType: "string",
+              name: "_name",
+              type: "string",
+            },
+            {
+              internalType: "uint256",
+              name: "_age",
+              type: "uint256",
+            },
+            {
+              internalType: "bool",
+              name: "_hasNFT",
+              type: "bool",
+            },
+            {
+              internalType: "address",
+              name: "_wallet",
+              type: "address",
+            },
+          ],
+          name: "createCredential",
+          outputs: [
+            {
+              internalType: "bytes32",
+              name: "",
+              type: "bytes32",
+            },
+          ],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+      ],
+      functionName: "createCredential",
+    })
 
   const form = useForm<z.infer<typeof issueCredSchema>>({
     resolver: zodResolver(issueCredSchema),
@@ -154,15 +86,23 @@ export default function IssueCredentialForm() {
     }
     // convert number to bigint
     const ageConverted = BigInt(values.age)
-    const { hash } = await writeAsync({
-      args: [values.name, ageConverted, values.hasDAONFT],
+    const addressPayload = useMyAddress
+      ? address
+      : (values.walletAddress as `0x${string}` | undefined)
+
+    if (!addressPayload) {
+      return
+    }
+
+    const { hash } = await createCredential({
+      args: [values.name, ageConverted, values.hasDAONFT, addressPayload],
     })
 
     if (hash) {
       alert(hash)
     }
 
-    await refetch()
+    setCred(values)
   }
 
   return (
@@ -243,17 +183,9 @@ export default function IssueCredentialForm() {
       <div className="flex flex-col gap-2 font-mono-border-rounded-md">
         <h2 className="text-lg font-bold">Credentials</h2>
         <pre className="p-2 bg-gray-900 text-white">
-          {JSON.stringify(
-            {
-              name: credentials?.[0] ?? "",
-              age: credentials?.[1].toString() ?? 0,
-              hasDAONFT: credentials?.[2] ?? false,
-            },
-            null,
-            2
-          )}
+          {JSON.stringify(cred, null, 2)}
         </pre>
-        <Button className="shrink-0" onClick={() => refetch()}>
+        <Button className="shrink-0" onClick={() => {}}>
           Refresh
         </Button>
       </div>
