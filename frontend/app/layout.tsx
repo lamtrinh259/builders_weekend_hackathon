@@ -47,15 +47,13 @@ export default function RootLayout({ children }: RootLayoutProps) {
         >
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
             <Providers>
-              <div className="relative flex min-h-screen flex-col">
+              <div className="relative flex h-screen flex-col">
                 <SiteHeader />
-                <div className="flex flex-row grow">
-                  <div className="border-r-1 shrink-0">
+                <div className="flex h-screen items-start">
+                  <div className="fixed border-r-1 shrink-0">
                     <SideBar />
                   </div>
-                  <div className="overflow-auto grow flex items-center justify-center p-16">
-                    {children}
-                  </div>
+                  <div className="grow p-16">{children}</div>
                 </div>
               </div>
               <TailwindIndicator />
