@@ -3,7 +3,7 @@ import { BadgeCheck, FilePlus, Forward, Pencil } from "lucide-react"
 export type SiteConfig = typeof siteConfig
 
 export const siteConfig = {
-  name: "BW23",
+  name: "DCHero DAO Tool",
   description: "A website for the Builder's Weekend June 2023",
   mainNav: [
     {
