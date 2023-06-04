@@ -16,21 +16,25 @@ export const siteConfig = {
       label: "Create a credential format",
       href: "/credentials/create",
       icon: FilePlus,
+      adminOnly: true,
     },
     {
       label: "Issue a credential",
       href: "/credentials/issue",
       icon: Pencil,
+      adminOnly: true,
     },
     {
       label: "Proof request",
       href: "/credentials/proof",
       icon: Forward,
+      adminOnly: false,
     },
     {
       label: "Verify credential",
       href: "/credentials/verify",
       icon: BadgeCheck,
+      adminOnly: false,
     },
   ],
 }
