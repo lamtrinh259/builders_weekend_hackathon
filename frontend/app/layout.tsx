@@ -50,10 +50,10 @@ export default function RootLayout({ children }: RootLayoutProps) {
               <div className="relative flex min-h-screen flex-col">
                 <SiteHeader />
                 <div className="flex flex-row grow">
-                  <div className="text-xl min-w-fit border-r-2">
+                  <div className="border-r-1 shrink-0">
                     <SideBar />
                   </div>
-                  <div className="overflow-y-auto grow flex items-center justify-center">
+                  <div className="overflow-auto grow flex items-center justify-center">
                     {children}
                   </div>
                 </div>
