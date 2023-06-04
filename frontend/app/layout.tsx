@@ -50,7 +50,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
               <div className="relative flex h-screen flex-col">
                 <SiteHeader />
                 <div className="flex h-screen items-start">
-                  <div className="fixed border-r-1 shrink-0">
+                  <div className="border-r-1 shrink-0">
                     <SideBar />
                   </div>
                   <div className="grow p-16">{children}</div>
