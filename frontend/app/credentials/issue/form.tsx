@@ -7,7 +7,7 @@ import { useForm } from "react-hook-form"
 import { useAccount, useContractRead, useContractWrite } from "wagmi"
 import { z } from "zod"
 
-import { formSchema } from "@/types/formSchema"
+import { issueCredSchema } from "@/types/formSchema"
 import { Button, buttonVariants } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import {
@@ -137,11 +137,11 @@ export default function IssueCredentialForm() {
     functionName: "setCredentials",
   })
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof issueCredSchema>>({
+    resolver: zodResolver(issueCredSchema),
   })
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: z.infer<typeof issueCredSchema>) {
     if (!isConnected) {
       alert("Please connect your wallet")
       return
