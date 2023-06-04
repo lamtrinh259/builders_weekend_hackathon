@@ -53,7 +53,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
                   <div className="border-r-1 shrink-0">
                     <SideBar />
                   </div>
-                  <div className="overflow-auto grow flex items-center justify-center">
+                  <div className="overflow-auto grow flex items-center justify-center p-16">
                     {children}
                   </div>
                 </div>

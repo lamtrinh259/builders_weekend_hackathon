@@ -11,4 +11,5 @@ export interface SideItem {
   label: string
   href: string
   icon: LucideIcon
+  adminOnly: boolean
 }
