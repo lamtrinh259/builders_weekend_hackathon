@@ -7,7 +7,6 @@ import { useForm } from "react-hook-form"
 import { useAccount, useContractRead, useContractWrite } from "wagmi"
 import { z } from "zod"
 
-import { issueCredSchema } from "@/types/formSchema"
 import { Button, buttonVariants } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import {
@@ -21,7 +20,12 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 
-import { submitAction } from "./actions"
+const issueCredSchema = z.object({
+  walletAddress: z.string().startsWith("0x"),
+  name: z.string().nonempty(),
+  age: z.number().int().positive(),
+  hasDAONFT: z.boolean(),
+})
 
 export default function IssueCredentialForm() {
   const { isConnected, address } = useAccount()
@@ -168,6 +172,19 @@ export default function IssueCredentialForm() {
         >
           <FormField
             control={form.control}
+            name="walletAddress"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Wallet Address</FormLabel>
+                <FormControl>
+                  <Input placeholder="0x..." {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
             name="name"
             render={({ field }) => (
               <FormItem>
@@ -199,6 +216,7 @@ export default function IssueCredentialForm() {
           <FormField
             control={form.control}
             name="hasDAONFT"
+            defaultValue={false}
             render={({ field }) => (
               <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
                 <FormControl>
@@ -209,7 +227,7 @@ export default function IssueCredentialForm() {
                     onCheckedChange={field.onChange}
                   />
                 </FormControl>
-                <FormLabel>Do you have a DAO NFT?</FormLabel>
+                <FormLabel>Does this user have a DAO NFT?</FormLabel>
                 <FormMessage />
               </FormItem>
             )}
