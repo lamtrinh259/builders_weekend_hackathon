@@ -6,17 +6,18 @@ import { DAOMember } from "./DAOMember.sol"; // This compiled fine, no error
 // import "openzeppelin-contracts/contracts/utils/cryptography/EIP712.sol";
 // import "openzeppelin-contracts/contracts/metatx/MinimalForwarder.sol";
 
-contract DCHero {
+contract DCHero{
     // keccak256(encodePacked(issuer, key)) => sha256(entityJson)
     mapping(address => bytes32) public credentialFormats;
     mapping(address => bytes32) public credentials;
 
-    // event OldCredentialCreated(address issuer, string key, bytes32 lookupHash, bytes32 jsonHash);
     event CredentialFormatCreated(address issuer, bytes32 credentialFormatHash);
     event CredentialCreated(address issuer, bytes32 credentialHash);
     event MemberAdded(string name, uint age, bool hasNFT, address wallet);
 
     DAOMember public members = new DAOMember("DCHero DAO");
+
+    bool here = true;
 
     struct Credential {
       string string_field;
@@ -30,27 +31,6 @@ contract DCHero {
       bool over18;
       bool hasNFT;
     }
-
-    // /**
-    // @param _name name of the person holding the credential
-    // @param _age age of the person holding the credential
-    // @param _hasNFT whether the person holding the credential has the DAOMember NFT
-    // @param _wallet address of the person holding the credential
-    // @return credentialFormat the keccak256 hash of the credential
-    // @dev not sure if bytes32 is the best type for the credentialFormat
-    //  */
-    // function createCredentialFormat(string memory _name, uint _age, bool _hasNFT, address _wallet) public pure returns (bytes32) {
-    //     Credential memory credential;
-    //     credential.name = _name;
-    //     credential.age = _age;
-    //     credential.hasNFT = _hasNFT;
-    //     credential.wallet = _wallet;
-
-    //     bytes memory credentialData = abi.encodePacked(credential.name, credential.age, credential.hasNFT, credential.wallet);
-    //     bytes32 credentialFormat = keccak256(credentialData);
-
-    //     return credentialFormat;
-    // }
 
     // /**
     // @param _name name of the person holding the credential
@@ -145,7 +125,7 @@ contract DCHero {
     }
 
     /// Function to verify proof request using non-zkp method with flexible comparison logic
-    function verifyProof(bytes32 proofRequest) public view returns (bool) {
+    function verifyProof(bytes32 proofRequest) public returns (bool) {
         // Unpack the proof request
         (string memory name, bool over18, bool hasNFT) = unpackProofRequest(proofRequest);
 
