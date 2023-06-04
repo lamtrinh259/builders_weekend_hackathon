@@ -27,7 +27,7 @@ contract DAOMember is ReentrancyGuard {
     string name;
     uint age;
     bool hasNFT;
-    address member;
+    address wallet;
   }
 
   DAOMember[] public members;
@@ -37,32 +37,32 @@ contract DAOMember is ReentrancyGuard {
   event MemberAdded(address indexed eoa, uint256 memberId);
   event MemberDeleted(address indexed eoa, uint256 memberId);
 
-  function addDAOMember(string memory _name, uint _age, bool _hasNFT, address _member)
+  function addDAOMember(string memory _name, uint _age, bool _hasNFT, address _wallet)
     public {
     onlyOwner(); // Only owner should be able to add member
-    require(memberIds[_member] == 0, "Member already exists");
+    require(memberIds[_wallet] == 0, "Member already exists");
     uint256 memberId = members.length;
-    members.push(DAOMember(_name, _age, _hasNFT, _member));
-    memberIds[_member] = memberId;
-    emit MemberAdded(_member, memberId);
+    members.push(DAOMember(_name, _age, _hasNFT, _wallet));
+    memberIds[_wallet] = memberId;
+    emit MemberAdded(_wallet, memberId);
   }
 
-  function deleteDAOMember(address _member) public {
+  function deleteDAOMember(address _wallet) public {
     onlyOwner(); // Only owner should be able to delete member
-    uint256 memberId = memberIds[_member];
+    uint256 memberId = memberIds[_wallet];
     require(memberId != 0, "Member does not exist");
     delete members[memberId];
-    delete memberIds[_member];
-    emit MemberDeleted(_member, memberId);
+    delete memberIds[_wallet];
+    emit MemberDeleted(_wallet, memberId);
   }
 
-  function getDAOMember(address _member) public view returns (string memory, uint, bool, address) {
-    uint256 memberId = memberIds[_member];
+  function getDAOMember(address _wallet) public view returns (string memory, uint, bool, address) {
+    uint256 memberId = memberIds[_wallet];
     return (
       members[memberId].name,
       members[memberId].age,
       members[memberId].hasNFT,
-      members[memberId].member
+      members[memberId].wallet
     );
   }
 
