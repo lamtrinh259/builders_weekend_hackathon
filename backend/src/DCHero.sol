@@ -88,19 +88,16 @@ contract DCHero{
 
     /// Function to generate proof request
     /// @dev not sure if bytes32 is the best type for the proof request
-    function createProofRequest(string memory name, bool over18, bool hasNFT) public pure returns (proofRequestFormat memory proofRequest, bytes32) {
-        bytes32 proofRequestHash = keccak256(abi.encodePacked(name, over18, hasNFT));
-        // return proofRequestHash;
-        // proofRequestFormat memory proofRequest;
+    function createProofRequest(string memory name, bool over18, bool hasNFT) public pure returns (proofRequestFormat memory proofRequest) {
         proofRequest.name = name;
         proofRequest.over18 = over18;
         proofRequest.hasNFT = hasNFT;
-        return (proofRequest, proofRequestHash);
+        return proofRequest;
     }
 
     /// Function to unpack proof request
     /// @dev this is a helper function to be used in case zkp doesn't work out
-    function unpackProofRequest(bytes32 proofRequest) public pure returns (string memory name, bool over18, bool hasNFT) {
+    function unpackProofRequest(bytes32 proofRequest) private pure returns (string memory name, bool over18, bool hasNFT) {
         // Extract the individual attributes from the proofRequest
         bytes memory proofRequestBytes = abi.encodePacked(proofRequest);
 
@@ -125,33 +122,25 @@ contract DCHero{
     }
 
     /// Function to verify proof request using non-zkp method with flexible comparison logic
-    function verifyProof(bytes32 proofRequest) public returns (bool) {
+    function verifyProof(proofRequestFormat memory proofRequest) public returns (bool) {
+        // Old method, no longer necessary
         // Unpack the proof request
-        (string memory name, bool over18, bool hasNFT) = unpackProofRequest(proofRequest);
-
-        // address signer = _hashTypedDataV4(keccak256(abi.encode(
-        //     keccak256("proofRequestFormat(string name,bool over18,bool hasNFT)"),
-        //     proofRequest.name,
-        //     proofRequest.over18,
-        //     proofRequest.hasNFT
-        // ))).recover(signature);
-
-        // (string memory memberName, uint memberAge, bool memberHasNFT, ) = members.getDAOMember(signer);
+        // (string memory name, bool over18, bool hasNFT) = unpackProofRequest(proofRequest);
 
         // Get the member's credential from the DAOMember contract, address is unused, so was left out of the function return
         (string memory memberName, uint memberAge, bool memberHasNFT, ) = members.getDAOMember(msg.sender);
 
         // Check for attribute matches based on flexible comparison logic
-        bool nameMatch = (keccak256(abi.encodePacked(name)) == keccak256(abi.encodePacked(memberName)));
-        bool ageMatch = !over18 || (memberAge > 18);
-        bool hasNFTMatch = !hasNFT || (hasNFT == memberHasNFT);
+        bool nameMatch = (keccak256(abi.encodePacked(proofRequest.name)) == keccak256(abi.encodePacked(memberName)));
+        bool ageMatch = proofRequest.over18 || (memberAge > 18);
+        bool hasNFTMatch = proofRequest.hasNFT || (proofRequest.hasNFT == memberHasNFT);
 
         // Return true if all of the requirements match
         return nameMatch && ageMatch && hasNFTMatch;
     }
 
     // To-do: implement function using zkp to prove that the user has the credential in response to the proof request
-    function verifyProofZKP(bytes32 proofRequest) public pure returns (bytes32) {
+    function verifyProofZKP(bytes32 proofRequestHash) public pure returns (bytes32) {
         // TODO: Implement this function
         revert("Not implemented yet");
     }
