@@ -60,7 +60,7 @@ export default function IssueCredentialForm() {
               type: "address",
             },
           ],
-          name: "createCredential",
+          name: "createCredentialFormat",
           outputs: [
             {
               internalType: "bytes32",
@@ -68,7 +68,7 @@ export default function IssueCredentialForm() {
               type: "bytes32",
             },
           ],
-          stateMutability: "nonpayable",
+          stateMutability: "pure",
           type: "function",
         },
       ],
